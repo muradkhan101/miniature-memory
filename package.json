@@ -1,0 +1,33 @@
+{
+  "name": "redux-rendering-blog",
+  "version": "1.0.0",
+  "description": "Server-side rendering for my blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muradkhan101/miniature-memory.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "express",
+    "contentful",
+    "jamstack"
+  ],
+  "author": "Murad Khan",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/muradkhan101/miniature-memory/issues"
+  },
+  "homepage": "https://github.com/muradkhan101/miniature-memory#readme",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "contentful": "^4.6.0",
+    "react": "^15.6.1",
+    "react-redux": "^5.0.6"
+  }
+}
