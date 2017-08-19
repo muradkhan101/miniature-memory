@@ -2,7 +2,7 @@ const react = require('react');
 const SingleCategoryContainer = require('./SingleCategoryContainer');
 const CategoryToggle = require('./CategoryToggle');
 
-let CategoriesContainer = React.createClass({
+let CategoriesContainer = react.createClass({
   getInitialState: () => {
     return {
       buttonStates: this.props.categories.map(e => true)

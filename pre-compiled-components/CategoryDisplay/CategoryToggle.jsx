@@ -1,6 +1,6 @@
 const react = require('react');
 
-let CategoryToggle = React.createClass({
+let CategoryToggle = react.createClass({
   render: () => {
     return (
       <div class="checkbox">

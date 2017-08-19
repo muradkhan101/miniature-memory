@@ -14,5 +14,5 @@ reactDOM.render(
   <Provider store={store}>
     <MainCategoryContainer />
   </Provider>,
-  document.querySelector('.content-container');
+  document.querySelector('.content-container')
 )

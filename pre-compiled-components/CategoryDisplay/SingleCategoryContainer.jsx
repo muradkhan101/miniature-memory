@@ -2,7 +2,7 @@ const react = require('react');
 const contentful = require('../contentful/contentfulAPI');
 const Post = require('./Post');
 
-let SingleCategoryContainer = React.createClass({
+let SingleCategoryContainer = react.createClass({
   getInitialState: () => {
     return {
       posts: []

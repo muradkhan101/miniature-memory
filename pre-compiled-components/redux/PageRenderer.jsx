@@ -2,7 +2,9 @@ const MainCategoryContainer = require('../CategoryDisplay/MainCategoryContainer'
 const reactDOM = require('react-dom');
 const react = require('react');
 const redux = require('redux');
-import { Provider } from 'react-redux';
+const Provider = require('react-redux').Provider;
+const jsdom = require('jsdom');
+const express = require('express');
 
 const handleRender = (req, res) => {
   const store = redux.createStore(MainCategoryContainer);
@@ -12,9 +14,29 @@ const handleRender = (req, res) => {
     </Provider>
   );
   const preloadedState = store.getState();
-  res.send(renderPage(html, preloadedState));
+
+  jsdom.fromFile(`${req.baseUrl}.html`).then((dom) => {
+    return createHtml(dom, html, preloadedState);
+  }).then(res.send);
 }
 
-const renderPage = (html, preloadedState) => {
-
+const createHtml = (dom, html, preloadedState) => {
+  let document = dom.window.document;
+  document.getElementById('react-container').appendChild(html);
+  document.querySelector('body').appendChild(jsdom.fragment(
+    `<script>
+      window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
+    </script>
+    <script src='client-min.js'></script>`
+  ))
+  return document.serialize();
 }
+
+const app = express();
+const port = 3000;
+
+app.use(express.static('test'));
+
+app.use(handleRender);
+
+app.listen(port)

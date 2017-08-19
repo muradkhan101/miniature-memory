@@ -2,7 +2,7 @@ const react = require('react');
 const contentful = require('../contentful/contentfulAPI');
 const CategoriesContainer = require('./CategoriesContainer');
 
-let CategoryListContainer = React.createClass({
+let CategoryListContainer = react.createClass({
     getInitialState: () => {
         return {
             categories: []
