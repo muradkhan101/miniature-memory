@@ -1,6 +1,6 @@
-const react = require('react');
+const React = require('react');
 
-let Post = react.createClass({
+let Post = React.createClass({
   render: () => {
     return (
       <a class="grid-item post-link" href={`blog.khanmurad.com/post/${this.props.data.slug}`}>

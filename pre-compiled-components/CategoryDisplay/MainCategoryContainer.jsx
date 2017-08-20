@@ -1,6 +1,6 @@
-const react = require('react');
+const React = require('react');
 const react_redux = require('react-redux');
-const contentful = require('../contentful/contentfulAPI');
+const contentful = require('../../contentful/contentfulAPI');
 const CategoriesContainer = require('./CategoriesContainer');
 
 // let CategoryListContainer = react.createClass({
@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch) => {
     addCategory: (category) => dispatch(addCategory(category))
   }
 }
-const MainCategoryContainer = react_redux.connect(
+let MainCategoryContainer = react_redux.connect(
   mapStateToProps,
   mapDispatchToProps
 )(CategoriesContainer);
@@ -46,6 +46,8 @@ contentful.client.getEntries({
   content_type: contentful.typeID.category
 }).then((data)=>{
   for (var i = 0; i < data.items.length; i++) {
-    dispatch(addCategory(data.items[i].fields.title))l
+    dispatch(addCategory(data.items[i].fields.title));
   }
 })
+
+module.exports = MainCategoryContainer;

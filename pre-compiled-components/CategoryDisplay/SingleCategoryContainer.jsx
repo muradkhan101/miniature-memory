@@ -1,8 +1,8 @@
-const react = require('react');
-const contentful = require('../contentful/contentfulAPI');
+const React = require('react');
+const contentful = require('../../contentful/contentfulAPI');
 const Post = require('./Post');
 
-let SingleCategoryContainer = react.createClass({
+let SingleCategoryContainer = React.createClass({
   componentDidMount: () => {
     contentful.client.getEntries({
         content_type: contentful.typeID.post,
@@ -19,9 +19,9 @@ let SingleCategoryContainer = react.createClass({
   render: () => {
     return (
       <div class={`${this.props.category}-post-container`} style={this.getVisibility()}>
-        this.props.posts.map((e) => {
-          <Post data={e} />
-        })
+        {this.props.posts.map((e) => {
+          return <Post data={e} />
+        })}
       </div>
     )
   }

@@ -1,8 +1,8 @@
 const MainCategoryContainer = require('../CategoryDisplay/MainCategoryContainer');
-const react = require('react');
+const React = require('react');
 const redux = require('redux');
 const reactDOM = require('react-dom');
-import { Provider } from 'react-redux';
+const Provider = require('react-redux').Provider;
 
 const preloadedState = window.__PRELOADED_STATE__;
 
