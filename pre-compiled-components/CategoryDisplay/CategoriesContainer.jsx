@@ -3,33 +3,25 @@ const SingleCategoryContainer = require('./SingleCategoryContainer');
 const CategoryToggle = require('./CategoryToggle');
 
 let CategoriesContainer = react.createClass({
-  getInitialState: () => {
-    return {
-      buttonStates: this.props.categories.map(e => true)
-    }
-  },
   render: () => {
     return (
       <div class="card article-container">
         <div class="card-title"><h1>Posts by Category</h1></div>
         <div class="category-toggles flex-row">
           this.props.categories.map((e, i) => {
-            <CategoryToggle category={e} index={i} checked={this.state.buttonStates[i]} click={this.toggleCategory}/>
+            <CategoryToggle category={e.category} checked={e.visible} click={this.toggleCategory}/>
           })
         </div>
         <div class="home-masonry-grid">
           this.props.categories.map((e, i) => {
-            <SingleCategoryContainer category={e} visible={this.state.buttonStates[i]}/>
+            <SingleCategoryContainer category={e.category} posts={e.posts} visible={e.visible}/>
           })
         </div>
       </div>
     )
   },
   toggleCategory: (toggle) => {
-    console.log(this);
-    var buttons = this.state.buttonStates;
-    buttons[toggle.index] = !buttons[toggle.index];
-    this.setState({buttonStates: buttons})
+    dispatch(toggleVisibility(toggle.category));
   }
 })
 

@@ -3,30 +3,23 @@ const contentful = require('../contentful/contentfulAPI');
 const Post = require('./Post');
 
 let SingleCategoryContainer = react.createClass({
-  getInitialState: () => {
-    return {
-      posts: []
-    }
-  },
   componentDidMount: () => {
     contentful.client.getEntries({
         content_type: contentful.typeID.post,
         'fields.tags[ne]': this.props.category
     }).then((data) => {
-      let allPosts = [];
       for (let i = 0; i < data.items.length; i++) {
-         allPosts.push(contentful.extractPostInfo(data.items[i]));
+         dispatch(addPost(this.props.category, contentful.extractPostInfo(data.items[i])));
       }
-      this.setState({posts: allPosts})
     })
   },
   getVisibility: () => {
-    return (this.props.visible ? 'display: initial;' : 'display: none;')
+    return (this.props.visible ? 'display: inline-block;' : 'display: none;')
   },
   render: () => {
     return (
       <div class={`${this.props.category}-post-container`} style={this.getVisibility()}>
-        this.state.posts.map((e) => {
+        this.props.posts.map((e) => {
           <Post data={e} />
         })
       </div>

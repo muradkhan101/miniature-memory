@@ -1,4 +1,5 @@
 const MainCategoryContainer = require('../CategoryDisplay/MainCategoryContainer');
+const action = require('./reducers/actions');
 const reactDOM = require('react-dom');
 const react = require('react');
 const redux = require('redux');
@@ -7,7 +8,7 @@ const jsdom = require('jsdom');
 const express = require('express');
 
 const handleRender = (req, res) => {
-  const store = redux.createStore(MainCategoryContainer);
+  const store = redux.createStore(action);
   const html = reactDOM.renderToString(
     <Provider store={store}>
       <MainCategoryContainer/>
