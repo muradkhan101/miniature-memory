@@ -1,11 +1,10 @@
+const contentful = require('../../../contentful/contentfulAPI');
 
 //Actions
 const ADD_CATEGORY = 'ADD_CATEGORY';
 const TOGGLE_VISIBILITY = 'TOGGLE_VISIBILITY';
 const ADD_POST = 'ADD_POST';
 const GOT_POST = 'GOT_POST';
-const GET_CATEGORIES = 'GET_CATEGORIES';
-const GET_POSTS = 'GET_POSTS';
 
 const addCategory = category => {
   return { type: ADD_CATEGORY, category };
@@ -22,30 +21,18 @@ const addPost = (category, data) => {
 const gotPosts = category => {
   return {type: GOT_POST, category};
 }
-const getPosts = (category) => {
-  return {type: GET_POSTS, category};
-}
-const getCategories = () => {
-  return {type: GET_CATEGORIES, category};
-}
 //Action Handlers
 
-const handleAction = (state = {loadedCategories: false}, action) => {
+const handleAction = (state = {}, action) => {
   switch (action.type) {
     case ADD_CATEGORY:
       return Object.assign({}, state, newCategory(state[action.category], action));
     case TOGGLE_VISIBILITY:
-      return Object.assign({}, state, manageVisibility(state[action.category], action));
+      return Object.assign({}, state, {[action.category]: manageVisibility(state[action.category], action)});
     case ADD_POST:
-      return Object.assign({}, state, newPost(state[action.category], action));
+      return Object.assign({}, state, {[action.category]: newPost(state[action.category], action)});
     case GOT_POST:
-      return Object.assign({}, state, gotPost(state[action.category], action));
-    case GET_POSTS:
-      fetchPostsByCategory()
-      return state;
-    case GET_CATEGORIES:
-      fetchCategories();
-      return Object.assign({}, state, {loadedCategories: true})
+      return Object.assign({}, state, {[action.category]: gotPost(state[action.category], action)});
     default:
       return state;
   }
@@ -56,7 +43,8 @@ const newCategory = (state = {}, action) => {
     [action.category]: {
       posts: [],
       visible: true,
-      got_posts: false
+      got_posts: false,
+      category: action.category
     }}
 };
 
@@ -68,7 +56,7 @@ const manageVisibility = (state = {}, action) => {
 
 const newPost = (state = {}, action) => {
   return Object.assign({}, state, {
-      posts: [...state[action.category].posts, action.data]
+      posts: [...state.posts, action.data]
     });
 };
 
@@ -79,55 +67,49 @@ const gotPost = (state = {}, action) => {
 };
 
 const fetchCategories = () => {
-  return (dispatch) => {
-      return contentful.client.getEntries({
-        content_type: contentful.typeID.category
-      }).then((data) => {
-        for (var i = 0; i < data.items.length; i++) {
-          dispatch(addCategory(data.items[i].fields.title));
-        }
-      })
-  }
-}
-
-const fetchUnloadedPosts = (state) => {
-  return (dispatch) => {
-    for (let category in Object.keys(state)) {
-      if (!state[category].got_posts)
-        return (new Promise((res, rej) => {
-          res(dispatch(fetchPostsByCategory(category)))
-        })).then(() => {
-          dispatch(gotPosts(category))
-        })
-    }
-  }
-}
-
-const fetchPostsByCategory = (category) => {
-  return (dispatch) => {
+  return dispatch => {
     return contentful.client.getEntries({
-        content_type: contentful.typeID.post,
-        'fields.tags[ne]': category
-    }).then((data) => {
-      for (let i = 0; i < data.items.length; i++) {
-         dispatch(addPost(category, contentful.extractPostInfo(data.items[i])));
+      content_type: contentful.typeID.category
+    }).then(data => {
+      var categories = [];
+      for (var i = 0; i < data.items.length; i++) {
+        categories.push(data.items[i].fields.title);
+        dispatch(addCategory(data.items[i].fields.title));
       }
-    }).then(() => {
-      dispatch(gotPost(category));
+      return categories;
+    });
+  };
+};
+
+function fetchUnloadedPosts(categories, dispatch) {
+  return dispatch => {
+    let promises = categories.map(function(category) {
+      return new Promise((resolve, reject) => {
+        contentful.client.getEntries({
+          content_type: contentful.typeID.post,
+          'fields.tags[ne]': category
+        }).then(data => {
+          for (let i = 0; i < data.items.length; i++) {
+            var something = dispatch(addPost(category, contentful.extractPostInfo(data.items[i])));
+          }
+          resolve();
+        })
+      })
     })
+    return Promise.all(promises).then(val => {
+      return val;
+    });
   }
 }
+
 module.exports = {
   ADD_CATEGORY,
   TOGGLE_VISIBILITY,
   ADD_POST,
-  GET_POSTS,
-  GET_CATEGORIES,
   addCategory,
   toggleVisibility,
   addPost,
   handleAction,
   fetchCategories,
-  fetchUnloadedPosts,
-  fetchPostsByCategory
-}
+  fetchUnloadedPosts
+};

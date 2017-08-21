@@ -11,8 +11,6 @@ delete window.__PRELOADED_STATE__;
 const store = createStore(MainCategoryContainer, preloadedState);
 
 reactDOM.render(
-  <Provider store={store}>
-    <MainCategoryContainer />
-  </Provider>,
-  document.getElementById('react-container')
+    <MainCategoryContainer state={store.getState()} store={store} />,
+    document.getElementById('react-container')
 )
