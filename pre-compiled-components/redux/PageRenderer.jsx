@@ -1,5 +1,5 @@
-const MainCategoryContainer = require('../CategoryDisplay/MainCategoryContainer');
-const actions = require('./reducers/actions');
+const MainCategoryContainer = require('./components/CategoryDisplay/MainCategoryContainer');
+const actions = require('./components/redux/reducers/actions');
 const reactDOM = require('react-dom/server');
 const React = require('react');
 const redux = require('redux');
@@ -9,20 +9,28 @@ const jsdom = require('jsdom').JSDOM;
 const express = require('express');
 
 const handleRender = (req, res) => {
+  if (req.originalUrl.indexOf('.') === -1) {
   var request = req;
-  var response = res;
   const store = redux.createStore(actions.handleAction, redux.applyMiddleware(thunk));
   store.dispatch(actions.fetchCategories())
   .then((categories) => store.dispatch(actions.fetchUnloadedPosts(categories)))
   .then(() => {
     const html = reactDOM.renderToString(
-      <MainCategoryContainer state={store.getState()} store={store} />
+      <Provider store={store} >
+        <MainCategoryContainer />
+      </Provider>
     );
     const preloadedState = store.getState();
-    jsdom.fromFile(`../../test/${request.originalUrl.slice(1)}.html`).then(dom => {
+    console.log(`Opening file: ${request.originalUrl}`);
+    jsdom.fromFile(`./test/${request.originalUrl.slice(1)}.html`).then(dom => {
       return createHtml(dom, html, preloadedState);
-    }).then(response.send);
+    }).then((domString) => {
+      res.send(domString);
+      res.end();
+    });
   });
+  return 1;
+}
 };
 
 const createHtml = (dom, html, preloadedState) => {

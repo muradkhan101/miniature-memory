@@ -6,12 +6,12 @@ class Post extends React.Component{
   }
   render() {
     return (
-      <a class="grid-item post-link" href={`blog.khanmurad.com/post/${this.props.data.slug}`}>
-        <div class="post cover-image" style={{'backgroundImage': `url("https://source.unsplash.com/featured/?${this.props.data.categories[0]}")`}}>
-          <div class="post-title">
+      <a className="grid-item post-link" href={`blog.khanmurad.com/post/${this.props.data.slug}`}>
+        <div className="post cover-image" style={{'backgroundImage': `url("https://source.unsplash.com/featured/?${this.props.data.categories[0]}")`}}>
+          <div className="post-title">
             <h3>{this.props.data.title}</h3>
           </div>
-          <div class="post-summary">
+          <div className="post-summary">
             <p>{this.props.data.summary}</p>
           </div>
         </div>

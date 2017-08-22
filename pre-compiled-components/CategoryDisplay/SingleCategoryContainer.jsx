@@ -11,7 +11,7 @@ class SingleCategoryContainer extends React.Component{
   }
   render() {
     return (
-      <div class={`${this.props.category}-post-container`} style={this.getVisibility()}>
+      <div className={`${this.props.category}-post-container`} style={this.getVisibility()}>
         {this.props.posts.map((e, i) => {
           return <Post key={i} data={e} />
         })}
