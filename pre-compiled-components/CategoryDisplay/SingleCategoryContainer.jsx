@@ -1,5 +1,5 @@
 const React = require('react');
-const contentful = require('../../contentful/contentfulAPI');
+const contentful = require('../contentful/contentfulAPI');
 const Post = require('./Post');
 
 class SingleCategoryContainer extends React.Component{

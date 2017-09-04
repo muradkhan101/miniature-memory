@@ -103,9 +103,6 @@ function fetchUnloadedPosts(categories, dispatch) {
 }
 
 module.exports = {
-  ADD_CATEGORY,
-  TOGGLE_VISIBILITY,
-  ADD_POST,
   addCategory,
   toggleVisibility,
   addPost,

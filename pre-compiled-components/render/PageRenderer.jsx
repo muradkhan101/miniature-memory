@@ -1,12 +1,12 @@
-const MainCategoryContainer = require('./components/CategoryDisplay/MainCategoryContainer');
-const actions = require('./components/redux/reducers/actions');
+const MainCategoryContainer = require('../CategoryDisplay/MainCategoryContainer');
+const actions = require('../redux/reducers/actions');
 const reactDOM = require('react-dom/server');
 const React = require('react');
 const redux = require('redux');
 const Provider = require('react-redux').Provider;
 const thunk = require('redux-thunk').default;
 const jsdom = require('jsdom').JSDOM;
-const express = require('express');
+const fs = require('fs');
 
 const handleRender = (req, res) => {
   if (req.originalUrl.indexOf('.') === -1) {
@@ -21,19 +21,20 @@ const handleRender = (req, res) => {
       </Provider>
     );
     const preloadedState = store.getState();
-    console.log(`Opening file: ${request.originalUrl}`);
-    jsdom.fromFile(`./test/${request.originalUrl.slice(1)}.html`).then(dom => {
-      return createHtml(dom, html, preloadedState);
-    }).then((domString) => {
-      res.send(domString);
-      res.end();
-    });
+    fs.writeFileSync('./categories-load.js', `var preloadedState = ${preloadedState}`);
+    // console.log(`Opening file: ${request.originalUrl}`);
+    // jsdom.fromFile(`./test/${request.originalUrl.slice(1)}.html`).then(dom => {
+    //   return createPrerenderHtml(dom, html, preloadedState);
+    // }).then((domString) => {
+    //   res.send(domString);
+    //   res.end();
+    // });
   });
   return 1;
 }
 };
 
-const createHtml = (dom, html, preloadedState) => {
+const createPrerenderHtml = (dom, html, preloadedState) => {
   let document = dom.window.document;
   document.getElementById('react-container').appendChild(jsdom.fragment(html));
   document.querySelector('body').appendChild(jsdom.fragment(
@@ -46,11 +47,6 @@ const createHtml = (dom, html, preloadedState) => {
   return dom.serialize();
 }
 
-const app = express();
-const port = 80;
-
-app.use(express.static('test'));
-
-app.use(handleRender);
-
-app.listen(port)
+module.exports = {
+  handleRender
+}
