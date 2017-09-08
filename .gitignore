@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+*.Ds_Store
+*config.json
+components/redux/*
+components/render/*
+components/CategoryDisplay/*

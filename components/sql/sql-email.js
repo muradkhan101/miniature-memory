@@ -33,7 +33,7 @@ const addEmail = (email, connection) => {
           }
         )
         return `${email} added to mailing list!`;
-      } throw (`${email} already exists in Mailing List`);
+      } throw (`${email} already exists in Mailing List.`);
     })
 }
 
@@ -49,11 +49,11 @@ const updateStatus = (parameters, connection) => {
           WHERE ADDRESS = ?;`,
           parameters, (error, results, fields) => {
             if (error)  throw (error);
-            console.log(`Mailing status updated for ${parameters[1]} to ${parameters[0]}`);
+            console.log(`Mailing status updated for ${parameters[1]} to ${parameters[0]}.`);
           }
         )
         return `Mailing status updated for ${parameters[1]} to ${parameters[0]}`;
-      } throw (`${parameters[1]} doesn't exist in Mailing List`);
+      } throw (`${parameters[1]} doesn't exist in Mailing List.`);
     })
   }
 

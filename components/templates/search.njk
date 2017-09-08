@@ -1,0 +1,34 @@
+{% include "head.njk" %}
+
+{% import "macros.njk" as macro %}
+
+{% include "navigation.njk" %}
+
+<main style="overflow: hidden;">
+    <div class="main-container">
+        <div class="flex-row">
+        <div class="card article-container">
+            <div class="card-title">
+                <h1> Search Results </h1>
+            </div>
+                <div class="home-masonry-grid">
+                    {% if posts %}
+                        {% for post in posts %}
+                           {{ macro.makePostSummary(post) }}
+                        {% endfor %}
+                    {% else %}
+                    <h3>Sorry, no posts were found :(</h3>
+                    {% endif %}
+                </div>
+        </div>
+           {% include "./newsletter-signup/signup-sidebar.njk" %}
+        </div>
+        <div id="mobile-info-bar">
+          <div class="flex-row">
+            {% include "./newsletter-signup/signup-module.njk" %}
+          </div>
+        </div>
+    </div>
+</main>
+
+{% include "footer.njk" %}

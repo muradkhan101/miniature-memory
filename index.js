@@ -1,31 +1,44 @@
 const express = require('express');
-// const email = require('./components/aws/email')
 const bodyparser = require('body-parser')
 const email = require('./components/sql/sql-email')
 const connect = require('./components/sql/connect')
+const contentful = require('./components/contentful/contentfulAPI');
 
 const app = express();
 const port = 3000;
 
-app.use(express.static('test'));
+const nunjucks = require('nunjucks');
+nunjucks.configure('components/templates', {
+  autoescape: true,
+  express: app
+})
+
 app.use(bodyparser.json());
 
+
+//Search Page
+app.get('/search', (req, res) => {
+  var query = req.parameters;
+  contentful.search(query).then(posts => {
+    var info = {posts, isPost: true};
+    res.render('search.njk', postInfo);
+  }).catch(err => {
+    console.log(err);
+    res.render('search.njk');
+  })
+});
+
+//E-Mail API
 app.post('/email', function(req, res) {
-  connect.doQuery([req.body.email], connect.connection, email.addEmail).then(code => {
-    if (code === 200) {
-      res.status(code).send('Success')
-    } else if (code === 300) {
-      res.status(code).send('Error')
-    }
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  connect.doQuery([req.body.email], connect.connection, email.addEmail).then(response => {
+      res.status(response.code).send(response.text)
   });
 })
 app.post('/email/unsubscribe', function(req, res) {
-  connect.doQuery([0, req.body.email], connect.connection, email.updateStatus).then(code => {
-    if (code === 200) {
-      res.status(code).send('Success')
-    } else if (code === 400) {
-      res.status(code).send('Error')
-    }
+  connect.doQuery([0, req.body.email], connect.connection, email.updateStatus).then(response => {
+    res.status(response.code).send(response.text)
   });
 })
 // app.use(handleRender);
