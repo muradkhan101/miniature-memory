@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.17.2",
     "contentful": "^4.6.0",
+    "cors": "^2.8.4",
     "express": "^4.15.4",
     "jsdom": "^11.1.0",
     "marked": "^0.3.6",

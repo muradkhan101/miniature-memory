@@ -4,7 +4,8 @@ const CategoriesContainer = require('./CategoriesContainer');
 
 const mapStateToProps = (state) => {
   return {
-    categories: state
+    categories: state.categories,
+    post: state.posts
   };
 }
 let MainCategoryContainer = react_redux.connect(

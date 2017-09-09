@@ -4,7 +4,6 @@ const contentful = require('../../contentful/contentfulAPI');
 const ADD_CATEGORY = 'ADD_CATEGORY';
 const TOGGLE_VISIBILITY = 'TOGGLE_VISIBILITY';
 const ADD_POST = 'ADD_POST';
-const GOT_POST = 'GOT_POST';
 
 const addCategory = category => {
   return { type: ADD_CATEGORY, category };
@@ -18,53 +17,48 @@ const addPost = (category, data) => {
   return { type: ADD_POST, category, data };
 };
 
-const gotPosts = category => {
-  return {type: GOT_POST, category};
-}
 //Action Handlers
 
 const handleAction = (state = {}, action) => {
   switch (action.type) {
     case ADD_CATEGORY:
-      return Object.assign({}, state, newCategory(state[action.category], action));
+      return Object.assign({}, state, newCategory(state.categories, action));
     case TOGGLE_VISIBILITY:
-      return Object.assign({}, state, {[action.category]: manageVisibility(state[action.category], action)});
+      return Object.assign({}, state, manageVisibility(state.categories, action));
     case ADD_POST:
-      return Object.assign({}, state, {[action.category]: newPost(state[action.category], action)});
-    case GOT_POST:
-      return Object.assign({}, state, {[action.category]: gotPost(state[action.category], action)});
+      return Object.assign({}, state, newPost(state.posts, action))
     default:
       return state;
   }
 };
 
-const newCategory = (state = {}, action) => {
-  return {
-    [action.category]: {
-      posts: [],
-      visible: true,
-      got_posts: false,
-      category: action.category
-    }}
+const newCategory = (state = [], action) => {
+  return state.concat({
+    category: action.category,
+    visible: true
+  })
 };
 
-const manageVisibility = (state = {}, action) => {
-  return Object.assign({}, state, {
-      visible: !state.visible,
-    });
+const manageVisibility = (state = [], action) => {
+  return state.map(e => {
+    return {
+      category: e.category,
+      visible: e.category === action.category ? !e.visible : e.visible
+    }
+  })
 };
 
-const newPost = (state = {}, action) => {
-  return Object.assign({}, state, {
-      posts: [...state.posts, action.data]
-    });
+const newPost = (state = [], action) => {
+  var uniquePost = true;
+  for (var i = 0; i < state.length; i++) {
+    if (state[0].slug === action.data.slug) {
+      uniquePost = false;
+      break;
+    }
+  }
+  return ( uniquePost ? state.concat(action.data) : state )
 };
 
-const gotPost = (state = {}, action) => {
-  return Object.assign({}, state, {
-      got_posts: true
-    });
-};
 
 const fetchCategories = () => {
   return dispatch => {
