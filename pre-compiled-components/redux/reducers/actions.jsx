@@ -1,4 +1,4 @@
-const contentful = require('../../../contentful/contentfulAPI');
+const contentful = require('../../contentful/contentfulAPI');
 
 //Actions
 const ADD_CATEGORY = 'ADD_CATEGORY';
@@ -69,7 +69,7 @@ const gotPost = (state = {}, action) => {
 const fetchCategories = () => {
   return dispatch => {
     return contentful.client.getEntries({
-      content_type: contentful.typeID.category
+      content_type: contentful.typeId.category
     }).then(data => {
       var categories = [];
       for (var i = 0; i < data.items.length; i++) {
@@ -86,7 +86,7 @@ function fetchUnloadedPosts(categories, dispatch) {
     let promises = categories.map(function(category) {
       return new Promise((resolve, reject) => {
         contentful.client.getEntries({
-          content_type: contentful.typeID.post,
+          content_type: contentful.typeId.post,
           'fields.tags[ne]': category
         }).then(data => {
           for (let i = 0; i < data.items.length; i++) {

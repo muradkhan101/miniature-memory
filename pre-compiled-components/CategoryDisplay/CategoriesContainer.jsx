@@ -17,7 +17,7 @@ class CategoriesContainer extends React.Component{
       categories.push(this.props.categories[category]);
     }
     return (
-      <div className="card article-container">
+      <div>
         <div className="card-title"><h1>Posts by Category</h1></div>
         <div className="category-toggles flex-row">
           {categories.map((e, i) => {
