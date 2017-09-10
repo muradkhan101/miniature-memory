@@ -1,34 +1,39 @@
-{% include "head.njk" %}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1, shrink-to-fit=no">
+  <title> Search - {{blogname}} </title>
+
+  <meta name="description" content="A blog about just about anything (but mostly programming">
+  <meta name="keywords" content="data science, programming, front-end, back-end, html, css, javascript, js">
+  <link rel="stylesheet" href="/resources/css/base.css">
+  <link rel="shortcut icon" href="/resources/images/favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css?family=Libre+Franklin:400,400i,600,700|Lora|Ubuntu+Mono:400,400i" rel="stylesheet">
+</head>
+
 
 {% import "macros.njk" as macro %}
 
 {% include "navigation.njk" %}
 
-<main style="overflow: hidden;">
-    <div class="main-container">
-        <div class="flex-row">
-        <div class="card article-container">
-            <div class="card-title">
-                <h1> Search Results </h1>
+<div class="spacer-image parallax" style="background-image: url('https://source.unsplash.com/random/daily');" value="0.3"></div>
+<main class="parallax background-square-full" value="0.3">
+    <div class="main-container flex-row">
+          <div class='card article-container'>
+            <div class='home-masonry-grid'>
+              <div class='grid-sizer'></div>
+              {% for post in posts %}
+                {{ macro.makePostSummary(post, baseURL)}}
+              {% endfor %}
             </div>
-                <div class="home-masonry-grid">
-                    {% if posts %}
-                        {% for post in posts %}
-                           {{ macro.makePostSummary(post) }}
-                        {% endfor %}
-                    {% else %}
-                    <h3>Sorry, no posts were found :(</h3>
-                    {% endif %}
-                </div>
-        </div>
-           {% include "./newsletter-signup/signup-sidebar.njk" %}
-        </div>
-        <div id="mobile-info-bar">
-          <div class="flex-row">
-            {% include "./newsletter-signup/signup-module.njk" %}
           </div>
-        </div>
+        {% include "./newsletter-signup/signup-sidebar.njk" %}
+    </div>
+    <div id="mobile-info-bar">
+      <div class="flex-col">
+        <h4>Join the Mailing List!</h4>
+        {% include "./newsletter-signup/signup-module.njk" %}
+      </div>
     </div>
 </main>
-
 {% include "footer.njk" %}

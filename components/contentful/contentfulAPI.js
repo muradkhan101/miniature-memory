@@ -10,10 +10,7 @@ const typeId = {
     user: "user"
 }
 
-var client = contentful.createClient({
-    accessToken: config.accessToken,
-    space: config.space
-});
+var client = contentful.createClient(config);
 
 const getPhotoFromAuthor = (author) => {
     var photoObj = author.fields.profilePhoto.fields.file.url;
@@ -33,7 +30,7 @@ const extractCategories = (categoryObject) => {
 }
 
 const makeSocialArray = (json) => {
-  let socialObject = JSON.parse(json);
+  let socialObject = json;
   socialArray = [];
   for (let link in Object.keys(socialObject)) {
     socialArray.push(socialObject[link])
@@ -70,19 +67,17 @@ const getRecentPosts = (limit) => {
         return recentPosts;
     })
 }
-
 const search = (query) => {
   return client.getEntries({
     'query': query
   }).then(function (data) {
     var posts = [];
     for (let i = 0; i < data.items.length; i++) {
-        posts.push(contentful.extractPostInfo(data.items[i]));
+        posts.push(extractPostInfo(data.items[i]));
     }
     return posts;
   })
 }
-
 const flattenLists = (contentType, field, id) => {
     client.getEntries({
         content_type: contentType,
@@ -98,24 +93,24 @@ const flattenLists = (contentType, field, id) => {
 }
 
 const extractPostInfo = (post) => {
-    var postInfo = {};
-    postInfo.title = post.fields.title;
-    postInfo.slug = post.fields.slug;
-    postInfo.body = marked(post.fields.body);
-    postInfo.summary = (postInfo.body.slice(0, 255) + '...').replace('/<.+?>/g', ' ');
-    postInfo.categories = extractCategories(post.fields.category);
-    if (post.fields.author) postInfo.author = getAuthorInfo(post.fields.author[0]); // Assumes posts only have one author
-    postInfo.isPost = post.fields.isPost;
-    postInfo.date = post.fields.date;
-    return postInfo;
+  var postInfo = {};
+  postInfo.title = post.fields.title;
+  postInfo.slug = post.fields.slug;
+  postInfo.body = marked(post.fields.body);
+  postInfo.summary = (postInfo.body.slice(0, 255) + '...').replace(/<.+?>/g, ' ');
+  postInfo.categories = extractCategories(post.fields.category);
+  if (post.fields.author) postInfo.author = getAuthorInfo(post.fields.author[0]); // Assumes posts only have one author
+  postInfo.isPost = post.fields.isPost;
+  postInfo.date = post.fields.date;
+  return postInfo;
 }
 
 module.exports = {
-    "client": client,
-    "flattenLists": flattenLists,
-    "getRecentPosts": getRecentPosts,
-    "getAllPosts": getAllPosts,
-    "extractPostInfo": extractPostInfo,
-    "typeID": typeId,
-    "search": search
+    client,
+    flattenLists,
+    getRecentPosts,
+    getAllPosts,
+    extractPostInfo,
+    typeId,
+    search
 }

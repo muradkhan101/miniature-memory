@@ -22,11 +22,11 @@ const addPost = (category, data) => {
 const handleAction = (state = {}, action) => {
   switch (action.type) {
     case ADD_CATEGORY:
-      return Object.assign({}, state, newCategory(state.categories, action));
+      return Object.assign({}, state, {categories: newCategory(state.categories, action)});
     case TOGGLE_VISIBILITY:
-      return Object.assign({}, state, manageVisibility(state.categories, action));
+      return Object.assign({}, state, {categories: manageVisibility(state.categories, action)});
     case ADD_POST:
-      return Object.assign({}, state, newPost(state.posts, action))
+      return Object.assign({}, state, {posts: newPost(state.posts, action)})
     default:
       return state;
   }
@@ -51,7 +51,7 @@ const manageVisibility = (state = [], action) => {
 const newPost = (state = [], action) => {
   var uniquePost = true;
   for (var i = 0; i < state.length; i++) {
-    if (state[0].slug === action.data.slug) {
+    if (state[i].slug === action.data.slug) {
       uniquePost = false;
       break;
     }

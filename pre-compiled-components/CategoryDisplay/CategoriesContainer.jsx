@@ -8,17 +8,19 @@ class CategoriesContainer extends React.Component{
   constructor(props) {
     super(props);
     this.toggleCategory = this.toggleCategory.bind(this);
+    this.checkVisibility = this.checkVisibility.bind(this);
+    this.getVisibility = this.getVisibility.bind(this);
   }
   toggleCategory(toggle) {
     this.props.dispatch(actions.toggleVisibility(toggle));
   }
   checkVisibility(category) {
-    for (var i = 0; i < this.props.categories; i++) {
-      if (this.props.categories[i][0] === category) return this.props.categories[i].visible;
+    for (var i = 0; i < this.props.categories.length; i++) {
+      if (this.props.categories[i].category === category) return this.props.categories[i].visible;
     }
   }
   getVisibility(post, category) {
-    return (checkVisibility(category) ? {display: 'inline-block'} : {display: 'none'})
+    return (this.checkVisibility(category) ? {display: 'inline-block'} : {display: 'none'})
   }
   render() {
     return (
@@ -30,8 +32,9 @@ class CategoriesContainer extends React.Component{
           })}
         </div>
         <div className="home-masonry-grid">
+          <div class='grid-sizer'></div>
           {this.props.posts.map((e, i) => {
-            return <Post data={e} key={i} style={this.getVisibility(e, categories[0])}/>
+            return <Post data={e} key={i} visible={this.getVisibility(e, e.categories[0])}/>
           })}
         </div>
       </div>

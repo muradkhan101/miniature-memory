@@ -5,7 +5,7 @@ const emailConstants = {
 
 // mysql.connection.changeUser({database: emaildb});
 
-const checkEmail = (email, connection) => {
+const checkEmail = (connection, email) => {
   return new Promise(function(resolve, reject) {
     connection.query(
       `SELECT * FROM ${emailConstants.mainTable}
@@ -18,7 +18,7 @@ const checkEmail = (email, connection) => {
   })
 }
 
-const addEmail = (email, connection) => {
+const addEmail = (connection, email) => {
   return new Promise(function(resolve, reject) {
     resolve(connection.changeUser({database: emailConstants.db}));
   }).then(() => checkEmail(email, connection))
@@ -37,7 +37,7 @@ const addEmail = (email, connection) => {
     })
 }
 
-const updateStatus = (parameters, connection) => {
+const updateStatus = (connection, parameters) => {
   return new Promise(function(resolve, reject) {
     resolve(connection.changeUser({database: emailConstants.db}))
   }).then(() => checkEmail(parameters[1], connection))
