@@ -13,7 +13,7 @@ const typeId = {
 var client = contentful.createClient(config);
 
 const getPhotoFromAuthor = (author) => {
-    var photoObj = author.fields.profilePhoto.fields.file.url;
+    var photoObj = 'http:' + author.fields.profilePhoto.fields.file.url;
     if (photoObj !== undefined) {
         return photoObj;
     } else return "insert blank photo";
@@ -30,10 +30,9 @@ const extractCategories = (categoryObject) => {
 }
 
 const makeSocialArray = (json) => {
-  let socialObject = json;
   socialArray = [];
-  for (let link in Object.keys(socialObject)) {
-    socialArray.push(socialObject[link])
+  for (let link in json) {
+    socialArray.push(json[link])
   }
   return socialArray;
 }
@@ -73,7 +72,7 @@ const search = (query) => {
   }).then(function (data) {
     var posts = [];
     for (let i = 0; i < data.items.length; i++) {
-        posts.push(extractPostInfo(data.items[i]));
+        posts.push(contentful.extractPostInfo(data.items[i]));
     }
     return posts;
   })
@@ -99,6 +98,7 @@ const extractPostInfo = (post) => {
   postInfo.body = marked(post.fields.body);
   postInfo.summary = (postInfo.body.slice(0, 255) + '...').replace(/<.+?>/g, ' ');
   postInfo.categories = extractCategories(post.fields.category);
+  postInfo.tags = post.fields.tags;
   if (post.fields.author) postInfo.author = getAuthorInfo(post.fields.author[0]); // Assumes posts only have one author
   postInfo.isPost = post.fields.isPost;
   postInfo.date = post.fields.date;

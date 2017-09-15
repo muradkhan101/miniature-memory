@@ -16,6 +16,8 @@ nunjucks.configure('./components/templates', {
   express: app
 })
 
+
+
 app.use(express.static('components/files'))
 app.use(bodyparser.json());
 app.use(cors());
@@ -24,7 +26,6 @@ app.use(cors());
 
 app.get('/random', (req, res) => {
   connect.poolQuery(connect.pool, random.getRandomPost).then(result => {
-    console.log(result);
     res.redirect(`${constants.baseURL}/posts/${result.text}`);
   })
 })
@@ -41,12 +42,10 @@ app.get('/search/:terms', (req, res) => {
     res.render('search.njk');
   })
 });
-app.get('/random', (req, res) => {
 
-})
 //E-Mail API
 
-app.post('/email', function(req, res) {
+app.post('/email', cors(), function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   connect.doQuery(connect.connection, email.addEmail, [req.body.email]).then(response => {

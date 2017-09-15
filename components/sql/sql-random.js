@@ -63,8 +63,7 @@ const getSlug = (connection, id) => {
        WHERE ID = ?;`,
        id, (error, results) => {
          if (error) throw(error);
-         console.log(results);
-         console.log(`Found ${results[0].SLUG}`)
+         console.log(`Found ${slug}`)
          resolve(results[0].SLUG)
        }
     )

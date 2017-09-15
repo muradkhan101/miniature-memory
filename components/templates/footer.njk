@@ -1,14 +1,14 @@
 {% import "macros.njk" as macro %}
 <footer>
-    <div class="flex-row background-triangle-bare parallax" id="footer-content">
+    <div class="flex-row-to-col background-triangle-bare parallax" id="footer-content">
         <div id="footer-links">
             <div class="site-links">
                 <nav id='footer-navigation'>
-                    {{ macro.navMenu(navigation, 'flex-col') }}
+                    {{ macro.navMenu(footerNav, 'flex-col-to-row') }}
                 </nav>
             </div>
             <div class="social-links">
-               {# {{ macro.makeSocialMediaLinks(socialMedia) }} #}
+                {{ macro.makeSocialMediaLinks(author.socialMedia) }}
             </div>
         </div>
         <div id="footer-text" class="flex-col">
@@ -31,12 +31,9 @@
             var button = event.target;
             button.classList.toggle('hover');
           });
-          e.addEventListener('click', (event) => {
-            event.preventDefault();
-            e.firstElementChild.click();
-          })
         });
     </script>
     {{ macro.importJS()}}
+    {% include 'search-bar.njk' %}
 </footer>
 </body>
