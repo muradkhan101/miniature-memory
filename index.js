@@ -25,7 +25,7 @@ app.use(cors());
 //Random API
 
 app.get('/random', (req, res) => {
-  connect.poolQuery(connect.pool, random.getRandomPost).then(result => {
+  connect.poolQuery(connect.poolQuery, random.getRandomPost).then(result => {
     res.redirect(`${constants.baseURL}/posts/${result.text}`);
   })
 })
@@ -45,17 +45,21 @@ app.get('/search/:terms', (req, res) => {
 
 //E-Mail API
 
-app.post('/email', cors(), function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.post('/email', function(req, res) {
   connect.doQuery(connect.connection, email.addEmail, [req.body.email]).then(response => {
       res.status(response.code).send(response.text)
+  }).catch(err => {
+    console.log(err);
+    res.send(err);
   });
 })
 app.post('/email/unsubscribe', function(req, res) {
   connect.doQuery(connect.connection, email.updateStatus, [0, req.body.email]).then(response => {
     res.status(response.code).send(response.text)
-  });
+  }).catch(err => {
+    console.log(err);
+    res.send(err);
+  })
 })
 // app.use(handleRender);
 

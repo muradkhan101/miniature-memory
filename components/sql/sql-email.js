@@ -21,7 +21,7 @@ const checkEmail = (connection, email) => {
 const addEmail = (connection, email) => {
   return new Promise(function(resolve, reject) {
     resolve(connection.changeUser({database: emailConstants.db}));
-  }).then(() => checkEmail(email, connection))
+  }).then(() => checkEmail(connection, email))
     .then((exists) => {
         if (!exists) {
         connection.query(
@@ -29,11 +29,11 @@ const addEmail = (connection, email) => {
           VALUES (?);`,
           email, (error, results, fields) => {
             if (error) throw (error);
-            console.log(`${email} added to mailing list!`);
+            console.log(`${email} added to mailing list!`)
+            return Promise.resolve(`${email} added to mailing list!`);
           }
         )
-        return `${email} added to mailing list!`;
-      } throw (`${email} already exists in Mailing List.`);
+      } else return Promise.reject((`${email} already exists in Mailing List.`));
     })
 }
 
@@ -50,10 +50,10 @@ const updateStatus = (connection, parameters) => {
           parameters, (error, results, fields) => {
             if (error)  throw (error);
             console.log(`Mailing status updated for ${parameters[1]} to ${parameters[0]}.`);
+            return Promise.resolve(`Mailing status updated for ${parameters[1]} to ${parameters[0]}.`);
           }
         )
-        return `Mailing status updated for ${parameters[1]} to ${parameters[0]}`;
-      } throw (`${parameters[1]} doesn't exist in Mailing List.`);
+      } else return Promise.reject((`${parameters[1]} doesn't exist in Mailing List.`));
     })
   }
 

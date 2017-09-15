@@ -72,7 +72,7 @@ const search = (query) => {
   }).then(function (data) {
     var posts = [];
     for (let i = 0; i < data.items.length; i++) {
-        posts.push(contentful.extractPostInfo(data.items[i]));
+        posts.push(extractPostInfo(data.items[i]));
     }
     return posts;
   })

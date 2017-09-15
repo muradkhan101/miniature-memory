@@ -1,5 +1,8 @@
 //Constants for website build
-const baseURL = 'http://blog.tycc.io';
+const base = 'blog';
+const api = 'api';
+const makeURL = (entry) => `http://${entry}.tycc.io`
+const baseURL = makeURL(base);
 
 const footer = {
     copyright: `Copyright &copy; ${(new Date()).getFullYear()} Murad Khan - All Rights Reserved`,
@@ -21,19 +24,38 @@ const navigation = [
     },
 
     {
-        href: `${baseURL}/random`,
+        href: `${makeURL(api)}/random`,
         title: 'Random'
     },
     {
-        href: `${baseURL}/search`,
+        href: `${makeURL(api)}/search`,
         title: 'Search'
     }
 ];
+const footerNav = [
+    {
+        href: baseURL,
+        title: 'Home'
+    },
+    {
+        href: `${baseURL}/categories`,
+        title: 'Categories'
+    },
 
+    {
+        href: `${makeURL(api)}/random`,
+        title: 'Random'
+    },
+    {
+        href: `https://github.com/muradkhan101`,
+        title: 'My Github'
+    }
+];
 const blogname = 'Things You Can Code';
 module.exports = {
   navigation,
   footer,
   blogname,
-  baseURL
+  baseURL,
+  footerNav
 }
