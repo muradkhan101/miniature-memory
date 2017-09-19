@@ -20,7 +20,10 @@ class CategoriesContainer extends React.Component{
     }
   }
   getVisibility(post, category) {
-    return (this.checkVisibility(category) ? {display: 'inline-block'} : {display: 'none'})
+    return (this.checkVisibility(category) ? {display: 'block'} : {display: 'none'})
+  }
+  componentDidUpdate() {
+    if (masonry) masonry.layout()
   }
   render() {
     return (
@@ -32,9 +35,9 @@ class CategoriesContainer extends React.Component{
           })}
         </div>
         <div className="home-masonry-grid">
-          <div class='grid-sizer'></div>
+          <div className='grid-sizer'></div>
           {this.props.posts.map((e, i) => {
-            return <Post data={e} key={i} visible={this.getVisibility(e, e.categories[0])}/>
+            return <Post data={e} key={e.slug} visible={this.getVisibility(e, e.categories[0])}/>
           })}
         </div>
       </div>

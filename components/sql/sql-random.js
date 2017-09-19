@@ -50,7 +50,7 @@ const getRandomPost = (connection) => {
       `SELECT * FROM ${constants.mainTable};`,
       (error, results) => {
         if (error) reject(error);
-        resolve(getSlug(connection, randomIndex(results.length+1, 1)))
+        resolve(results[randomIndex(results.length + 1)].SLUG)
       }
     )
   })
@@ -63,7 +63,7 @@ const getSlug = (connection, id) => {
        WHERE ID = ?;`,
        id, (error, results) => {
          if (error) throw(error);
-         console.log(`Found ${slug}`)
+         console.log(`Found ${results[0].SLUG}`)
          resolve(results[0].SLUG)
        }
     )

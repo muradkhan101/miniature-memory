@@ -25,7 +25,8 @@ app.use(cors());
 //Random API
 
 app.get('/random', (req, res) => {
-  connect.poolQuery(connect.poolQuery, random.getRandomPost).then(result => {
+  connect.poolQuery(connect.pool, random.getRandomPost).then(result => {
+    console.log(`Got page ${result}`)
     res.redirect(`${constants.baseURL}/posts/${result.text}`);
   })
 })
